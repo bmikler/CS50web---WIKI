@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django import forms
 import markdown
+import random
 
 from . import util
 
@@ -45,12 +46,36 @@ def search(request):
                 if query.lower() == entry.lower():
                     # redirect to entry with entry name entry
                     return redirect('entry', entry=entry)
-            
-            return render(request, "encyclopedia/search.html", {
-                "query": "no ok"
-            })
-        
+
+            list = []
+
+            for entry in util.list_entries():
+                if entry.lower().count(query.lower()) > 0:
+                    list.append(entry)
+
+            # check if input match any of entries
+            if len(list) > 0:
+                return render(request, "encyclopedia/search.html", {
+                    "list": list
+                })
+            else:
+                return render(request, "encyclopedia/search.html", {
+                    "message": "Not Found"
+                })
+
         else:
+            # if user submit empty prompt error
             return render(request, "encyclopedia/search.html", {
-                "query": "No search query given"
+                "message": "No search query given"
             })
+
+    else:
+        return redirect('index')
+
+def random_page(request):
+    entry_no = (random.randrange(len(util.list_entries())))
+    entry = util.list_entries()[entry_no]
+    return redirect('entry', entry=entry)
+
+
+

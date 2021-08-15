@@ -6,6 +6,12 @@
 
 {% block body %}
 
-    {{ query }}
+    <h1>Search Result</h1>
+    <p> {{ message }} </p>
+    <ul>
+        {% for entry in list %}
+            <li><a href="{% url 'entry' entry=entry %}">{{ entry }}</a></li>
+        {% endfor %}
+    </ul>
 
 {% endblock %}
