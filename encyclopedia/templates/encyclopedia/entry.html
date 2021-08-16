@@ -1,11 +1,19 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    Encyclopedia
+Encyclopedia
 {% endblock %}
 
 {% block body %}
 
 {% autoescape off %}{{ entry }}{% endautoescape %}
+
+{% if edit %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="edit">
+</form>
+{% endif %}
 
 {% endblock %}
