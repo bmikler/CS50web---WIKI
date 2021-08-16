@@ -117,6 +117,8 @@ def edit_page(request, entry):
     title = entry
     content = util.get_entry(title)
 
+    print(content)
+
     return render(request, "encyclopedia/edit_page.html", {
         "title": title,
         "content": content
