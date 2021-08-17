@@ -2,21 +2,20 @@ from django.shortcuts import redirect, render
 from django import forms
 import markdown
 import random
-
 from . import util
 
 # form for search
-
-
 class SearchForm(forms.Form):
     q = forms.CharField()
 
 # form for new page
-
-
 class NewPageForm(forms.Form):
     title = forms.CharField()
     content = forms.CharField()
+
+# form for edit page
+class EditPageForm(forms.Form):
+    edit_content = forms.CharField()
 
 
 def index(request):
@@ -88,6 +87,7 @@ def search(request):
 
 
 def new_page(request):
+
     if request.method == "POST":
         form = NewPageForm(request.POST)
         if form.is_valid():
@@ -114,13 +114,18 @@ def new_page(request):
 
 def edit_page(request, entry):
 
-    title = entry
-    content = util.get_entry(title)
+    if request.method == "POST":
+        form = EditPageForm(request.POST)
+        if form.is_valid():
+            edit_content = form.cleaned_data['edit_content']
+            print(edit_content)
+            util.save_entry(entry, edit_content)
+            return redirect('entry', entry=entry)
 
-    print(content)
+    content = util.get_entry(entry)
 
     return render(request, "encyclopedia/edit_page.html", {
-        "title": title,
+        "title": entry,
         "content": content
     })
 

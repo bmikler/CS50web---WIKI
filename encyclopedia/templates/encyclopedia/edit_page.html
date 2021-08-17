@@ -7,15 +7,14 @@ Encyclopedia
 {% block body %}
 
 <div>
-    <h1>Edit page</h1>
+    <h1>Edit page {{ title }}</h1>
     <p>Use markdown syntax.</p>
 
-    <form action="" method="POST">
+    <form action="{% url 'edit_page' entry=title %}" method="POST">
 
         {% csrf_token %}
-        <input type="text" disabled="disabled" value="{{ title }}">
         <div>
-            <textarea name="content" placeholder="Entry content..." rows="10">{{ content }}</textarea>
+            <textarea class="text-editor" name="edit_content" placeholder="Entry content..." rows="10"> {{ content }}</textarea>
         </div>
         <input class="btn btn-dark" type="submit" value="Save">
     </form>
