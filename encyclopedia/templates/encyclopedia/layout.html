@@ -13,9 +13,8 @@
             <div class="sidebar col-lg-2 col-md-3">
                 <div class="logo"><img class="logo" src="{% static 'encyclopedia/logo.png' %}"></div>
                 <h2>Wiki</h2>
-                <form action="{% url 'search' %}" method="POST"> 
-                    {% csrf_token %}
-                    <input class="search" type="text" name="q" id="id_q" placeholder="Search Encyclopedia">
+                <form action="{% url 'search' %}"> 
+                    <input class="search" type="text" name="q" placeholder="Search Encyclopedia">
                 </form>
                 <div>
                     <a href="{% url 'index' %}">Home</a>

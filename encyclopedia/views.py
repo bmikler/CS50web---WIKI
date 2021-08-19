@@ -33,48 +33,42 @@ def entry(request, entry):
 
 def search(request):
 
-    if request.method == "POST":
+    # fill the form by informations posted by form
+    query = request.GET["q"]
 
-        # fill the form by informations posted by form
-        query = request.POST["q"]
+    if query:
 
-        if query:
+        # check if query is in the list of entries
+        if list_check(query, util.list_entries()):
+            # redirect to entry with entry name entry
+            return redirect('entry', entry=query)
 
-            # check if query is in the list of entries
-            if list_check(query, util.list_entries()):
-                # redirect to entry with entry name entry
-                return redirect('entry', entry=query)
+        list = []
 
-            list = []
+        for entry in util.list_entries():
+            if entry.lower().count(query.lower()) > 0:
+                list.append(entry)
 
-            for entry in util.list_entries():
-                if entry.lower().count(query.lower()) > 0:
-                    list.append(entry)
-
-            # check if input match any of entries
-            if len(list) > 0:
-                return render(request, "encyclopedia/search.html", {
-                    "list": list
-                })
-            else:
-                return render(request, "encyclopedia/search.html", {
-                    "message": "Not Found"
-                })
-
-        else:
-            # if user submit empty prompt error
+        # check if input match any of entries
+        if len(list) > 0:
             return render(request, "encyclopedia/search.html", {
-                "message": "No search query given"
+                "list": list
+            })
+        else:
+            return render(request, "encyclopedia/search.html", {
+                "message": "Not Found"
             })
 
     else:
-        return redirect('index')
+        # if user submit empty prompt error
+        return render(request, "encyclopedia/search.html", {
+            "message": "No search query given"
+        })
 
 
 def new_page(request):
 
     if request.method == "POST":
-
 
         title = request.POST['title']
         content = "#" + title + "\n" + request.POST['content']
