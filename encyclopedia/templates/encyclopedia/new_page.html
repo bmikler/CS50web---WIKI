@@ -19,7 +19,7 @@ Encyclopedia
     <form action="{% url 'new_page' %}" method="POST">
 
         {% csrf_token %}
-        <input class="text" name="title" placeholder="Title..." autofocus>
+        <input class="text" name="title" placeholder="Title..." autofocus autocomplete="off">
         <div>
             <textarea class="text-editor" name="content" placeholder="Entry content..." rows="10"></textarea>
         </div>

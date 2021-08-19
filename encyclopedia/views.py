@@ -1,21 +1,7 @@
 from django.shortcuts import redirect, render
-from django import forms
 import markdown
 import random
 from . import util
-
-# form for search
-class SearchForm(forms.Form):
-    q = forms.CharField()
-
-# form for new page
-class NewPageForm(forms.Form):
-    title = forms.CharField()
-    content = forms.CharField()
-
-# form for edit page
-class EditPageForm(forms.Form):
-    edit_content = forms.CharField()
 
 
 def index(request):
@@ -50,10 +36,9 @@ def search(request):
     if request.method == "POST":
 
         # fill the form by informations posted by form
-        form = SearchForm(request.POST)
+        query = request.POST["q"]
 
-        if form.is_valid():
-            query = form.cleaned_data["q"]
+        if query:
 
             # check if query is in the list of entries
             if list_check(query, util.list_entries()):
@@ -89,11 +74,12 @@ def search(request):
 def new_page(request):
 
     if request.method == "POST":
-        form = NewPageForm(request.POST)
-        if form.is_valid():
 
-            title = form.cleaned_data['title']
-            content = "#" + title + "\n" + form.cleaned_data['content']
+
+        title = request.POST['title']
+        content = "#" + title + "\n" + request.POST['content']
+
+        if title and content:
 
             # check if the title is in the list of entries
             if list_check(title, util.list_entries()):
@@ -115,10 +101,9 @@ def new_page(request):
 def edit_page(request, entry):
 
     if request.method == "POST":
-        form = EditPageForm(request.POST)
-        if form.is_valid():
-            edit_content = form.cleaned_data['edit_content']
-            print(edit_content)
+
+        edit_content = request.POST['edit_content']
+        if edit_content:
             util.save_entry(entry, edit_content)
             return redirect('entry', entry=entry)
 
